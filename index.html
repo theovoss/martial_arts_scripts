@@ -1,0 +1,95 @@
+<head>
+</head>
+
+<body>
+<p>Positions</p>
+<ul>
+    <li>Open</li>
+    <li>Closed</li>
+    <li>High Chamber</li>
+    <li>Low Chamber</li>
+</ul>
+
+<input type="radio" name="include_position_in_set" value="false" checked="checked"> Positions As Prefix<br>
+<input type="radio" name="include_position_in_set" value="true"> Positions Per Set<br>
+
+<p>Number of moves in a Set:</p>
+<select id="number_of_moves">
+    <option value=1>1</option>
+    <option value=2>2</option>
+    <option value=3 selected="true">3</option>
+    <option value=4>4</option>
+    <option value=5>5</option>
+    <option value=6>6</option>
+</select>
+
+<div id="move_definition">
+    <p>Type of Hit</p>
+    <ul>
+        <li>Forhand</li>
+        <li>Backhand</li>
+    </ul>
+
+    <p>Height of Hit</p>
+    <ul>
+        <li>High</li>
+        <li>Low</li>
+    </ul>
+</div>
+
+<button id="generate">Generate Sequence</button>
+
+<div id="output">
+</div>
+
+<script>
+    // variables
+    var positions = ["Open", "Closed", "High Chamber", "Low Chamber"];
+    var type_of_hit = ["Forehand", "Backhand"];
+    var height = ["High", "Low"];
+
+    var generate_button = document.getElementById("generate");
+    generate_button.onclick = generate_output
+
+    function getRandomElement(myArray) {
+        var index = Math.floor(Math.random() * myArray.length);
+        return myArray[index];
+    }
+
+    function appendParagraph(output_div, text) {
+        var node = document.createElement("P");
+        var textnode = document.createTextNode(text);
+        node.appendChild(textnode);
+        output_div.appendChild(node);
+    }
+
+    function generate_output() {
+        // user inputs
+        var size_of_set = document.getElementById("number_of_moves").value;
+        var include_position_in_set = document.querySelector('input[name="include_position_in_set"]:checked').value === "true";
+
+        var output_div = document.getElementById("output")
+
+        // clear
+        while (output_div.firstChild) {
+            output_div.removeChild(output_div.firstChild);
+        }
+
+        // populate
+        if(include_position_in_set === false) {
+            var position = getRandomElement(positions)
+            appendParagraph(output_div, position);
+        }
+        for(var i = 0; i < size_of_set; i++) {
+            var value;
+            if(include_position_in_set === true) {
+                value = getRandomElement(positions) + ". " + getRandomElement(height) + " " + getRandomElement(type_of_hit);
+            } else {
+                value = getRandomElement(height) + " " + getRandomElement(type_of_hit);
+            }
+            appendParagraph(output_div, value);
+        }
+    }
+</script>
+
+</body>
